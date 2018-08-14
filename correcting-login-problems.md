@@ -31,6 +31,8 @@ ssh root@10.0.0.2
 Because we have passwordless ssh configured for root from the icpboot node to all of the other cluster nodes you can use: `ssh 10.0.0.2` or you can use the host name defined in `/etc/hosts` for the master node: `ssh master01.icp.local`
 
 The `kubectl` executable is available in the `icp-inception` image that is part of the ICP images. (It is also available in the `kubernetes` image.)  To get it out of the container and onto the machine where you need it you can use a `docker run` command that looks like:
+
+**This is just a sample**
 ```
 docker run --net=host -v /usr/local/bin:/data ibmcom/icp-inception:2.1.0.3-ee cp /kubectl /data
 ```
@@ -55,14 +57,9 @@ docker login icpboot.icp.local:8500
 ```
 At the prompts provide **admin** for the user and **passw0rd** for the password.
 
-Now, you can do the `pull`:
-```
-docker pull icpboot.icp.local:8500/ibmcom/icp-inception:2.1.0.3-ee
-```
-
 Copy the `kubectl` to the VM `/usr/local/bin`
 ```
-docker run -e LICENSE=accept --net=host -v /usr/local/bin:/data ibmcom/icp-inception:2.1.0.3-ee cp /usr/local/bin/kubectl /data
+docker run -e LICENSE=accept --net=host -v /usr/local/bin:/data icpboot.icp.local:8500/ibmcom/icp-inception:2.1.0.3-ee cp /usr/local/bin/kubectl /data
 ```
 At this point you should be able to run `kubetl` and get all of its usage info:
 ```
