@@ -16,22 +16,25 @@ Lab - Push Docker Images to the ICP Private Docker Registry
 In this lab exercise, you use a Java application that is packaged as a WAR file, and build a Docker container that combines the official IBM WebSphere Liberty Docker image with the application WAR file. Then, you log in to the ICP Private Docker Registry, and push the custom Docker image to the registry.
 
 ## Preparing to build a Docker image <a name="prepthebuild"></a>
-You start with an application WAR file (HelloFromLiberty.war) that is already created. This application is very simple, and  contains a single JSP that, when run, prints the message "Hello World from Liberty on IBM Cloud Private" in your browser.
+You start with an application WAR file (HelloFromLiberty.war) that has already been created for you. This application is very simple, and  contains a single JSP that, when run, prints the message "Hello World from Liberty on IBM Cloud Private" in your browser.
 
-1. Login to the `master` node as **root**. Download the file from this Box folder:  ![HelloFromLiberty Application](https://ibm.box.com/s/z2vcj7ls8klup9de8kiy97832u5v1zcl)
+1. Login to the `master` node as **root**. 
+
+2. Make a directory called "HelloFromLiberty" to hold all of the components that you use to build your Docker image and then change your current location to the new directory:
+
+> mkdir HelloFromLiberty
+> cd HelloFromLiberty
+
+For this lab, you will add 2 files to this new directory.
+
+3.  Use the following command to copy the HelloFromLiberty.war file into the HelloFromLiberty directory that you just created.  
+> curl -O https://raw.githubusercontent.com/jdiggity22/rtp-bootcamp/master/Labs_development/Assets/privateregistry/HelloFromLiberty.war
+
+This WAR file contains the simple Java Server Page (JSP) in the following image.
 
 ![HelloFromLibery Application](images/privateregistry/Private-Registry-01.png)
 
-2. Make a directory called "HelloFromLiberty" to hold all of the components that you use to build your Docker image.  For this lab, your new directory will contain only two items:
-
-   The "HelloFromLiberty.war" WAR file.
-   A Dockerfile.
-
-A Dockerfile is a file that contains instructions for the Docker `build` command that describes the components and the process for building a Docker image.
-
-3.  Copy the [HelloFromLiberty.war](Assets/privateregistry/HelloFromLiberty.war) file into the HelloFromLiberty directory that you just created. 
-
-4. Using the editor of your choice, create a file with the name "Dockerfile" that contains the following two lines:
+4. Use vi or another Linux text editor of your choice to create a file in the HelloFromLiberty directory with the name "Dockerfile" that contains the following two lines:
 
 ![Dockerfile](images/privateregistry/Private-Registry-03.png)
 
@@ -86,7 +89,7 @@ Recall from above that when you built the Docker image, the tag that is assigned
 To successfully push a Docker image to the ICP Private Docker Registry, the image tag must conform to the correct format, as follows:
 
 	<Registry URI>/<Repository Name>/<Image Name>:<Image Version>
-	
+
 The tag that you attached to the Docker image when you created it does not contain the registry URI as a prefix.  Before you can push the Docker image to the registry, you must add another tag to the image. A Docker image can be tagged with an any number of tags, so in this case, so you can add a tag, rather than rename one.  
 
 1. Use the following Docker `tag` command to add a tag to the Docker image:
