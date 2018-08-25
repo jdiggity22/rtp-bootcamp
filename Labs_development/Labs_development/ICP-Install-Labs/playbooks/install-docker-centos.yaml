@@ -87,15 +87,14 @@
       state: present
     become: True
 
+  - name: "Do a systemd daemon-reload to reload of changes to docker service file"
+    systemd:
+      daemon-reload: yes
+    become: True
+
   - name: "Start and enable Docker service"
     service:
       name: docker
       state: started
       enabled: yes
-    become: True
-
-  - name: "Reload Docker daemon to ensure reload of changes to service file"
-    service:
-      name: docker
-      state: reloaded
     become: True

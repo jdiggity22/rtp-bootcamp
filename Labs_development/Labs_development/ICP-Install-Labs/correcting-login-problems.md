@@ -19,6 +19,21 @@ You need at least 2 things to use `kubectl` in a `bash` shell:
 1. the `kubectl` executable
 2. a bunch of environment variables set to values that are used by `kubectl` to connect to a Kubernetes API server as an authenticated user.  This is referred to as a `client config` or `login context` or a `kube config`.  In this write-up it will be referred to as a `client config`.
 
+## Restarting kubelet and docker
+
+One quick and dirty thing to try to clear up the login problem in a scenario where it is acceptable to stop and restart the master node is to go through these steps (as root on the master node):
+
+```
+systemctl stop kubelet
+systemctl stop docker
+systemctl start docker
+systemctl start kubelet
+```
+
+Running the above steps is the equivalent of rebooting the master node.
+
+In an HA deployment with multiple masters, you would do the above steps on the current active master, i.e., the one that has the master VIP.
+
 ## Installing the kubectl executable
 
 **The steps described in this section need to be executed on the master node.**
@@ -29,6 +44,8 @@ ssh root@10.0.0.2
 ```
 
 Because we have passwordless ssh configured for root from the icpboot node to all of the other cluster nodes you can use: `ssh 10.0.0.2` or you can use the host name defined in `/etc/hosts` for the master node: `ssh master01.icp.local`
+
+*TBD* - Is `kubectl` in the `icp-inception` image?  I usually get it from the `kubernetes` image.
 
 The `kubectl` executable is available in the `icp-inception` image that is part of the ICP images. (It is also available in the `kubernetes` image.)  To get it out of the container and onto the machine where you need it you can use a `docker run` command that looks like:
 ```
@@ -47,6 +64,11 @@ If there are a lot of images in your local registry you can filter for what you 
 ```
 docker images | grep inception
 ```
+If you are getting `kubectl` from the `kubernetes` image:
+```
+docker images | grep kubernetes
+```
+
 If `icp-inception` is in your local registry you can see what tag it has and modify the above `docker run` command to copy the `kubectl` executable to `/usr/local/bin` on the VM you are using.
 
 In the case of the VMs being used for your ICP environment, a private docker registry was set up on the `icpboot` VM, and you will need to `pull` the `icp-inception` image from there into your local registry and then you can run the above command to copy `kubectl` to `/usr/local/bin`.  To do the pull from the private registry on `icpboot` you first need to authenticate to it:
@@ -84,7 +106,9 @@ Another "trick" to using `kubectl` without creating your own client config is to
 kubectl --kubeconfig=/var/lib/kubelet/kubelet-config get pods -n kube-system -o wide
 ```
 
-*TBD* The `/var/lib/kubelet/kubelet-config` file may exist only on the master node.
+The `/var/lib/kubelet/kubelet-config` file exists on all the nodes.
+
+The `master` node also has `/var/lib/kubelet/kubectrl-config` which is needed for certain commands that require super-user permissions.
 
 The above `get pods` command should dump out a list of all the `kube-system` pods and information about that particularly the `state`.
 
@@ -119,3 +143,5 @@ systemctl start kubelet
 ```
 
 The last "bouncing" of `kubelet` and `docker` should clean out any flakes with the `auth` pods.
+
+*NOTE:* You do need to wait for the `auth` pods to come back up before attempting a login.  Use the above `get pods` command with the `grep auth` to monitor the pod status.
