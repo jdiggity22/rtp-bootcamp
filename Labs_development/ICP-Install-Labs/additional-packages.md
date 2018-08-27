@@ -35,6 +35,7 @@ This section lists some software that is needed at some time or another. These p
 | yum-utils      | `yum -y install yum-utils`  | for `yum-config-manager`           |    
 | unzip          | `yum -y install unzip`      | zip archive extractor            |
 | git            | `yum -y install git`        | source file repo management <br/>`boot` node only |
+| jq             | `yum -y install jq`         | For JSON parsing in shell scripts  |
 | bind-utils     | `yum -y install bind-utils` | for `nslookup`                     |
 | net-tools      | `yum -y install net-tools`  | for `netstat` to see what ports are in use  |
 | psmisc         | `yum -y install psmisc`     | for `fuser` to find/kill processes holding file locks     |
