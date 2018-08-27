@@ -36,7 +36,7 @@ Lab - Console Treasure Hunt
 In this lab exercise, you explore the IBM Cloud Private Administration Console by completing a Treasure Hunt.
 
 ### Log in to your ICP Admin Console <a name="login"></a>
-If you are not already logged in to the ICP Admin Console from a previous exercise, open a browser and navigate to `https://<icp_master_ip>:8443`
+If you are not already logged in to the ICP Admin Console from a previous exercise, open a browser and navigate to `https://10.0.0.2:8443`
 
 ![ICP Login Screen](images/treasurehunt/login.jpg)
 
@@ -126,7 +126,7 @@ Click **Menu** and then select **Manage > Helm Repositories** to navigate to the
 
 ![ICP Helm Repositories](images/treasurehunt/helmrepo.jpg)
 
-Note: If you want to connect to other repositories, you can add them here. 
+Note: If you want to connect to other repositories, you can add them here.
 
 ### Storage <a name="storage"></a>
 Click **Menu** and then select **Platform > Storage** to navigate to the Storage page.

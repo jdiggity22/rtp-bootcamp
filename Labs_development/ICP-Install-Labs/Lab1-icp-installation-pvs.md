@@ -97,7 +97,7 @@ stop-firewalld.yaml
 ```
 sudo su -
 ```
-Going forward is you do not see the `#` prompt then you are not `root` and you need to `sudo` to become root.
+Going forward if you do not see the `#` prompt then you are not `root` and you need to `sudo` to become root.
 
 **Step 1: Execute this command to stop `firewalld`**
 

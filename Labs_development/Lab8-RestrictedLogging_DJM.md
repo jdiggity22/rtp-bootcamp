@@ -29,9 +29,7 @@ ELK requires two PVCs to function. The following steps walk you through the proc
     chmod 777 elk*
     ```
 
-**Note:** These are the only commands that you enter on the `boot` node in this exercise. All subsequent commands are entered on the `master` node.
-
-2. In a **terminal** session that is connected to your `master` node as the **root** user, copy the following PV definition in to a file named `elk-pv1.yaml`, and change the **server IP address** (9.37.138.12) to the correct one for your environment.
+2. In a **terminal** session that is connected to your `boot` node as the **root** user, copy the following PV definition in to a file named `elk-pv1.yaml`, and change the **server IP address** (10.0.0.1) to the correct one for your environment.
 
     ```
     apiVersion: v1
@@ -46,10 +44,10 @@ ELK requires two PVCs to function. The following steps walk you through the proc
         storage: 10Gi
       nfs:
         path: /storage/elk-storage1
-        server: 9.37.138.12
+        server: 10.0.0.1
     ```
 
-3. Copy the following PV definition in to a file named `elk-pv2.yaml`, and change the **server IP address** (9.37.138.12) to the correct one for your environment:
+3. Copy the following PV definition in to a file named `elk-pv2.yaml`, and change the **server IP address** (10.0.0.1) to the correct one for your environment:
 
     ```
     apiVersion: v1
@@ -64,7 +62,7 @@ ELK requires two PVCs to function. The following steps walk you through the proc
         storage: 10Gi
       nfs:
         path: /storage/elk-storage2
-        server: 9.37.138.12
+        server: 10.0.0.1
     ```
 4. Configure the kubectl command line to connect to your ICP Cluster. Click the User icon on the navigation bar in the ICP Admin Console, and then select Configure Client. Copy the commands and paste them in to the terminal window.
 
@@ -163,7 +161,7 @@ Now that ELK is running, access Kibana and verify that you can see data from all
 
 5. Click **Discover** on the left-hand menu to run a default query against ElasticSearch for all log messages that have been generated in the last 15 minutes.
 
-6. Modify the fields that are shown on the screen. Click the **Settings icon** on the **Available Fields** line, and add the following fields: ``` kubernetes.namespace```, and ```log```. 
+6. Modify the fields that are shown on the screen. Click the **Settings icon** on the **Available Fields** line, and add the following fields: ``` kubernetes.namespace```, and ```log```.
 
 **Note:** the namespaces that are displayed include kube-system, which proves that this ELK instance is collecting data from other namespaces.
 
@@ -294,6 +292,15 @@ In this section, you modify the filebeat configuration to only send log messages
 }
 }
 ```
+
+#### Delete the ELK Helm Chart
+In this section you delete the ELK deployment due to disk space restrictions on the boot node.
+
+1. Run the following command to delete the Helm Release
+
+    ```
+    helm delete --purge elk-lab --tls
+    ```
 
 #### End of Lab Review
 In this lab exercise, you configured *restricted* logging in IBM Cloud Private. You:

@@ -14,7 +14,7 @@ In this lab exercise you will deploy a sample NodeJS Helm Chart.
 ### Create a new Namespace <a name="namespace"></a>
 In this section you will create a new namespace to deploy the Helm Charts in to.
 
-1. If you aren't already logged in to the ICP Admin Console from a previous exercise, open a browser and navigate to `https://<icp_master_ip>:8443` and log in using `username: admin` and `password: admin`
+1. If you aren't already logged in to the ICP Admin Console from a previous exercise, open a browser and navigate to `https://10.0.0.2:8443` and log in using `username: admin` and `password: admin`
 
 2. Click **Menu** and then select **Manage > Namespaces** to navigate to the Namespaces page.
 
@@ -78,7 +78,7 @@ In this section, you deploy, test, and then remove the NodeJS Sample Helm Chart 
 
 17. Locate the **nodejs-sample** Helm Release on the **Workloads > Helm Resleases** page again.
 
-18. Click the **Action** link for the **nodejs-sample** Helm Release and select **Delete**. 
+18. Click the **Action** link for the **nodejs-sample** Helm Release and select **Delete**.
 
 19. Click **Remove** to confirm.
 
@@ -87,7 +87,7 @@ In this section, you deploy, test, and then remove the NodeJS Sample Helm Chart 
 ### Deploy the NodeJS Helm Chart using the Helm CLI <a name="cmdDeploy"></a>
 In this section, you deploy, test, and then remove the NodeJS Sample Helm Chart by using the Helm CLI.
 
-1. If you don't already have one open, open a **terminal** session that is connected to your `master` node as the **root** user.
+1. If you don't already have one open, open a **terminal** session that is connected to your `boot` node as the **root** user.
 
 2. If not completed in a previous exercise, configure the kubectl command line to connect to your ICP Cluster. Click the **User** icon on the navigation bar in the ICP Admin Console and then select **Configure Client** and copy the commands and paste them in to the terminal window.
 

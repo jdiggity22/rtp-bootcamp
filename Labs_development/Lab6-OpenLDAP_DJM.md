@@ -67,7 +67,7 @@ In this lab exercise, you deploy a standalone OpenLDAP Docker Container that has
 ### Deploying and Testing OpenLDAP <a name="deploytest"></a>
 In this section, you create a Kubernetes **Deployment** and a Kubernetes **Service** for the OpenLDAP container. When the container is running, you access the container from a command line, and issue some LDAP queries.
 
-1. If you do not already have one open, open a **terminal** session that is connected to your `master` node as the **root** user.
+1. If you do not already have one open, open a **terminal** session that is connected to your `boot` node as the **root** user.
 
 2. If not completed in a previous exercise, configure the kubectl command line to connect to your ICP Cluster. Click the **User** icon on the navigation bar in the ICP Admin Console and then select **Configure Client** and copy the commands and paste them in to the terminal window.
 
@@ -426,7 +426,7 @@ In this section, you create a Kubernetes **Deployment** and a Kubernetes **Servi
 In this section, you configure IBM Cloud Private to use the OpenLDAP server that you just deployed for Role Based Access Control (RBAC).
 
 #### Create the LDAP Connection
-1. If you are not already logged in to the ICP Admin Console from a previous exercise, open a browser and navigate to `https://<icp_master_ip>:8443`. Log in by using `username: admin` and `password: admin`.
+1. If you are not already logged in to the ICP Admin Console from a previous exercise, open a browser and navigate to `https://10.0.0.2:8443`. Log in by using `username: admin` and `password: admin`.
 
 2. Click **Menu**, and then select **Manage > Authentication**.
 
@@ -514,7 +514,7 @@ In the section, you work through the process of creating teams in ICP, and assig
   | support    | support    | viewer   | ldap-lab    |
 
   When you are finished, you have three **Teams**.
-  
+
   ![Teams](images/ldap/teams.jpg)  
 
 #### Validate the Users

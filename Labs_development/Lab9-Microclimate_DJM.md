@@ -18,7 +18,7 @@ In this section, you configure the environment for Microclimate.
 
 #### Create Docker secret and patch service account
 
-1. In a **terminal** session connected to your `master` node as the **root** user, run the following command to create a Docker registry secret in the default namespace:
+1. In a **terminal** session connected to your `boot` node as the **root** user, run the following command to create a Docker registry secret in the default namespace:
 
    ```
    kubectl create secret docker-registry microclimate-registry-secret \
@@ -57,7 +57,7 @@ In this section, you configure the environment for Microclimate.
 #### Create Persistant Volumes (PV) and Persistant Volume Claims (PVC)
 Microclimate requires two PVCs to function: one to store workspace data, and another for Jenkins. The following steps walk you through the process of creating the PV and PVC.
 
-**Note**: In this lab environment, the NFS Server is running on the icp-proxy node. In a *production* environment, a dedicated NFS Server will probably exist.
+**Note**: In this lab environment, the NFS Server is running on the icp-boot node. In a *production* environment, a dedicated NFS Server will probably exist.
 
 1. In a **terminal** session that is connected to your `boot` node as the **root** user, run the following commands to create the directories that are mapped to the PV:
 
@@ -71,9 +71,7 @@ Microclimate requires two PVCs to function: one to store workspace data, and ano
     chmod 777 mc*
     ```
 
-**Note:** These are the only commands that you enter on the `boot` node in this exercise. All subsequent commands are entered on the `master` node.
-
-2. In a **terminal** session that is connected to your `master` node as the **root** user, copy the following PV definition in to a file named `mc-workspace-pv.yaml`, and change the **server IP address** (9.37.138.12) to the correct one for your environment.
+2. In a **terminal** session that is connected to your `boot` node as the **root** user, copy the following PV definition in to a file named `mc-worspace-pv.yaml`, and change the **server IP address** (10.0.0.1) to the correct one for your environment.
 
     ```
     apiVersion: v1
@@ -88,10 +86,10 @@ Microclimate requires two PVCs to function: one to store workspace data, and ano
         storage: 2Gi
       nfs:
         path: /storage/mc-workspace
-        server: 9.37.138.12
+        server: 10.0.0.1
     ```
 
-3. Copy the following PV definition in to a file named `mc-jenkins-pv.yaml`, and change the **server IP address** (9.37.138.12) to the correct one for your environment:
+3. Copy the following PV definition in to a file named `mc-jenkins-pv.yaml`, and change the **server IP address** (10.0.0.1) to the correct one for your environment:
 
     ```
     apiVersion: v1
@@ -106,10 +104,10 @@ Microclimate requires two PVCs to function: one to store workspace data, and ano
         storage: 8Gi
       nfs:
         path: /storage/mc-jenkins
-        server: 9.37.138.12
+        server: 10.0.0.1
     ```
 
-4. Copy the following PVC definition in to a a file named `mc-workspace-pvc.yaml`:
+4. Copy the following PVC definition in to a a file named `mc-worspace-pvc.yaml`:
 
     ```
    kind: PersistentVolumeClaim
@@ -144,9 +142,9 @@ Microclimate requires two PVCs to function: one to store workspace data, and ano
    ```
    kubectl create -f ./mc-workspace-pv.yaml
 
-   kubectl create -f ./mc-jenkins-pv.yaml
+   kubectl create -f ./mc-worspace-pvc.yaml
 
-   kubectl create -f ./mc-workspace-pvc.yaml
+   kubectl create -f ./mc-jenkins-pv.yaml
 
    kubectl create -f ./mc-jenkins-pvc.yaml
    ```
@@ -185,14 +183,14 @@ In this section, you deploy the Microclimate Helm Chart by using the IBM Admin c
   | Dynamic Provisioning | no |
 
   In the **Microclimate** section:
-  **NOTE**: You must change the Jenkins hostname value to include your icp-proxy-ip address. For example, microclimate.9.37.138.12.nip.io.
+  **NOTE**: You must change the Jenkins hostname value to include your icp-proxy-ip address. For example, microclimate.10.0.0.5.nip.io.
 
   | Parameter       | Value |
   | ------------- |-------------|
   | Microclimate hostname | microclimate.icp-proxy-ip.nip.io |
 
   In the **Jenkins** section:
-  **NOTE**: You must change the Jenkins hostname value to include your icp-proxy-ip address. For example, jenkins.9.37.138.12.nip.io.
+  **NOTE**: You must change the Jenkins hostname value to include your icp-proxy-ip address. For example, jenkins.10.0.0.5.nip.io.
 
   | Parameter       | Value |
   | ------------- |-------------|
@@ -212,7 +210,7 @@ microclimate-ibm-microclimate-devops-86db55bd57-v76hd   1/1       Running   0   
 microclimate-jenkins-56766f9b49-slxtw                   1/1       Running   0          6m
 ```
 
-6. Once all the pods are running, you can open a browser tab and navigate to http://microclimate.icp-proxy-ip.nip.io. (Replace icp-proxy-ip with your ICP Proxy IP Address. For example, microclimate.9.37.138.12.nip.io.)
+6. Once all the pods are running, you can open a browser tab and navigate to http://microclimate.icp-proxy-ip.nip.io. (Replace icp-proxy-ip with your ICP Proxy IP Address. For example, microclimate.10.0.0.5.nip.io.)
 
 7. Read and accept the Microclimate license agreement, and click **Accept**.
 
@@ -222,7 +220,7 @@ In this section, you import an example NodeJS microservice project in to Microcl
 
 1. Select Import Project.
 
-2. Enter "https://github.com/microclimate-demo/node" in the Git field, and click **Next**.
+2. Enter "https://github.com/davemulley/nodeexample" in the Git field, and click **Next**.
 
 3. Verify that **Authentication required is not selected**, and click **Import**.
 
@@ -230,21 +228,21 @@ In this section, you import an example NodeJS microservice project in to Microcl
 
     ![Editor](images/microclimate/editor.jpg)
 
-5. Using the File Viewer, open `/node/public` and `/node/server`, and review the source code for the sample application.
+5. Using the File Viewer, open `/nodeexample/public` and `/nodeexample/server`, and review the source code for the sample application.
 
-6. Open the `health` endpoint (`/node/server/routers/health.js`). Note that it simply replies with `status: UP` whenever invoked. Kubernetes uses this endpoint to determine whether the application is up and running, or not.
+6. Open the `health` endpoint (`/nodeexample/server/routers/health.js`). Note that it simply replies with `status: UP` whenever invoked. Kubernetes uses this endpoint to determine whether the application is up and running, or not.
 
     ![Health](images/microclimate/health.jpg)
 
-7. Open `/node/public/index.html`. Note that the page replies with a simple message. You change this message later in the lab exercise.
+7. Open `/nodeexample/public/index.html`. Note that the page replies with a simple message. You change this message later in the lab exercise.
 
     ![Index](images/microclimate/index.jpg)
 
-8. Open `/node/Dockerfile`. Note that the Dockerfile first uses package.json to define the dependencies, and later copies the application files in to the `/app` folder on the nodejs image.
+8. Open `/nodeexample/Dockerfile`. Note that the Dockerfile first uses package.json to define the dependencies, and later copies the application files in to the `/app` folder on the nodejs image.
 
     ![Dockerfile](images/microclimate/dockerfile.jpg)
 
-9. Open `/node/Jenkinsfile`. Note that Jenkins uses the IBM provided and maintained `MicroserviceBuilder` library to handle the deployment.
+9. Open `/nodeexample/Jenkinsfile`. Note that Jenkins uses the IBM provided and maintained `MicroserviceBuilder` library to handle the deployment.
 
     ![Jenkinsfile](images/microclimate/jenkinsfile.jpg)
 
@@ -260,7 +258,7 @@ In this section, you import an example NodeJS microservice project in to Microcl
 
     ![Open App](images/microclimate/open_app1.jpg)
 
-13. Close the browser tab, and return to the Microclimate dashboard. Click **Edit code**, and return to the `/node/public/index.html` file. Change the `Hello world! This is a StarterKit` line to a different value, and save your changes.
+13. Close the browser tab, and return to the Microclimate dashboard. Click **Edit code**, and return to the `/nodeexample/public/index.html` file. Change the `Hello world! This is a StarterKit` line to a different value, and save your changes.
 
     ![New Index.html](images/microclimate/index2.jpg)
 
@@ -284,7 +282,7 @@ In this section, you import an example NodeJS microservice project in to Microcl
 
 2. Click **Create pipeline**.
 
-3. Enter https://github.com/microclimate-demo/node in the Repository location field.
+3. Enter https://github.com/davemulley/nodeexample in the Repository location field.
 
 4. Click **Create pipeline**.
 
